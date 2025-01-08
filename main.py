@@ -46,7 +46,19 @@ def play_audio(filename):
     stream.close()
     p.terminate()
 
+def analyze_audio(filename, threshold_db=-30.0, min_duration=2000, max_duration=3000):
+    audio = AudioSegment.from_wav(filename)
+    loud_chunks = [chunk for chunk in audio[::1000] if chunk.dBFS > threshold_db]
+
+    for chunk in audio[::1000]:
+        print(f"Detected a loud chunk at {chunk.dBFS} dB.")
+            
+    if len(loud_chunks) * 1000 >= min_duration and len(loud_chunks) * 1000 <= max_duration:
+        print(f"There are between {min_duration/1000} and {max_duration/1000} seconds where the volume is above {threshold_db} dB.")
+    else:
+        print(f"The volume does not meet the criteria.")
+
 if __name__ == "__main__":
     record_audio("shhhh.wav", 5)
-    play_audio("shhhh.wav")
+    analyze_audio("shhhh.wav")
     

@@ -55,10 +55,13 @@ def analyze_audio(filename, threshold_db=-30.0, min_duration=2000, max_duration=
             
     if len(loud_chunks) * 1000 >= min_duration and len(loud_chunks) * 1000 <= max_duration:
         print(f"There are between {min_duration/1000} and {max_duration/1000} seconds where the volume is above {threshold_db} dB.")
+        return True
     else:
         print(f"The volume does not meet the criteria.")
+        return False
 
 if __name__ == "__main__":
-    record_audio("shhhh.wav", 5)
-    analyze_audio("shhhh.wav")
-    
+    while True:
+        record_audio("shhhh.wav", 5)
+        if analyze_audio("shhhh.wav"):
+            play_audio("calm.wav") 
